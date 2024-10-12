@@ -14,12 +14,12 @@ GameObject:
   - component: {fileID: 405494719756794374}
   - component: {fileID: 2376328389840485687}
   - component: {fileID: 857282359831646451}
-  - component: {fileID: 5230640752113397964}
+  - component: {fileID: -2004925364296395365}
   - component: {fileID: 5917769572939484388}
   - component: {fileID: 1081259356329394300}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,7 +124,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2953382677620378216}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2848dc2678902504190962b34d55f253, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -157,12 +157,12 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 5230640752113397964}
+  - {fileID: -2004925364296395365}
   - {fileID: 5917769572939484388}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5230640752113397964
+--- !u!114 &-2004925364296395365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,13 +171,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2953382677620378216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &5917769572939484388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraWork: {fileID: 1081259356329394300}
   rb: {fileID: 405494719756794374}
-  speed: 2
-  maxSpeed: 10
+  speed: 4
+  maxSpeed: 20
 --- !u!114 &1081259356329394300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,8 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138514627b67e22459422d913bc3f880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 7
+  distance: 9
   height: 9
-  centerOffset: {x: 0, y: 3, z: 0}
-  followOnStart: 1
-  smoothSpeed: 0.8
+  centerOffset: {x: 0, y: 4, z: 0}
+  followOnStart: 0

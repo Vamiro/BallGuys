@@ -59,8 +59,6 @@ public class LaunchWindow : BaseWindow
                 playerNameInputField.text = defaultName;
             }
         }
-
-        PhotonNetwork.NickName =  defaultName;
     }
 
     protected override void OnHide()
