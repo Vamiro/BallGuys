@@ -190,10 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adf895673a94bc09f24be63f8c0f0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraWork: {fileID: 1081259356329394300}
+  cameraWorkComponent: {fileID: 1081259356329394300}
   rb: {fileID: 405494719756794374}
-  speed: 3
-  maxSpeed: 10
+  speed: 4
+  maxSpeed: 12
 --- !u!114 &1081259356329394300
 MonoBehaviour:
   m_ObjectHideFlags: 0

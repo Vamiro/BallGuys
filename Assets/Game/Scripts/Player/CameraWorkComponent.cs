@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraWork : MonoBehaviour
+public class CameraWorkComponent : MonoBehaviour
 {
     #region Private Fields
 

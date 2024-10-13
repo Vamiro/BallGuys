@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum RotationAxis
@@ -7,7 +8,7 @@ public enum RotationAxis
     Z
 }
 
-public class Rotator : MonoBehaviour
+public class RotatorComponent : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
     [SerializeField] private RotationAxis rotationAxis;
@@ -31,6 +32,8 @@ public class Rotator : MonoBehaviour
             case RotationAxis.Z:
                 rb.angularVelocity = transform.forward * speed;
                 break;
+            default:
+                throw new Exception("Invalid Rotation Axis");
         }
     }
 }

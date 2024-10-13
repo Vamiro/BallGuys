@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(TimingAction))]
-public class ImpulseTrap : MonoBehaviour
+[RequireComponent(typeof(TimingActionComponent))]
+public class ImpulseTrapComponent : MonoBehaviour
 {
-    [SerializeField] private TimingAction timingAction;
+    [SerializeField] private TimingActionComponent timingActionComponent;
     
     [Header("Impulse")]
     [SerializeField] private Vector3 impulseDirection;
@@ -22,25 +23,25 @@ public class ImpulseTrap : MonoBehaviour
     {
         mRenderer.material = sleepingMaterial;
 
-        timingAction.OnSleeping -= TimingActionOnSleeping;
-        timingAction.OnSleeping += TimingActionOnSleeping;
+        timingActionComponent.OnSleeping -= TimingActionOnSleeping;
+        timingActionComponent.OnSleeping += TimingActionOnSleeping;
         
-        timingAction.OnWaiting -= TimingActionOnWaiting;
-        timingAction.OnWaiting += TimingActionOnWaiting;
+        timingActionComponent.OnWaiting -= TimingActionOnWaiting;
+        timingActionComponent.OnWaiting += TimingActionOnWaiting;
         
-        timingAction.OnAction -= ThrowPlayer;
-        timingAction.OnAction += ThrowPlayer;
+        timingActionComponent.OnAction -= ThrowPlayer;
+        timingActionComponent.OnAction += ThrowPlayer;
         
-        timingAction.OnCoolingDown -= TimingActionOnCoolingDown;
-        timingAction.OnCoolingDown += TimingActionOnCoolingDown;
+        timingActionComponent.OnCoolingDown -= TimingActionOnCoolingDown;
+        timingActionComponent.OnCoolingDown += TimingActionOnCoolingDown;
     }
 
     private void OnDestroy()
     {
-        timingAction.OnSleeping -= TimingActionOnSleeping;
-        timingAction.OnWaiting -= TimingActionOnWaiting;
-        timingAction.OnAction -= ThrowPlayer;
-        timingAction.OnCoolingDown -= TimingActionOnCoolingDown;
+        timingActionComponent.OnSleeping -= TimingActionOnSleeping;
+        timingActionComponent.OnWaiting -= TimingActionOnWaiting;
+        timingActionComponent.OnAction -= ThrowPlayer;
+        timingActionComponent.OnCoolingDown -= TimingActionOnCoolingDown;
     }
 
     private void TimingActionOnSleeping()
@@ -48,7 +49,7 @@ public class ImpulseTrap : MonoBehaviour
         mRenderer.material = sleepingMaterial;
 
         if (!_playerRb) return;
-        timingAction.Activate();
+        timingActionComponent.Activate();
     }
 
     private void TimingActionOnWaiting()
@@ -72,7 +73,7 @@ public class ImpulseTrap : MonoBehaviour
     {
         if (!other.gameObject.CompareTag("Player") || PlayerController.LocalPlayerInstance != other.gameObject) return;
         _playerRb = other.gameObject.GetComponent<Rigidbody>();
-        timingAction.Activate();
+        timingActionComponent.Activate();
     }
 
     private void OnCollisionExit(Collision other)

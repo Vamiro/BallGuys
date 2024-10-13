@@ -142,8 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124905fdd2386db439ccccc292a2d4eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToWait: 5
-  cooldown: 5
+  timeToWait: 2
+  cooldown: 4
 --- !u!114 &4151499283324424246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1352a05c37cf2984f9d7bf97f07bfb22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timingAction: {fileID: 779523028395934672}
+  timingActionComponent: {fileID: 779523028395934672}
   impulseDirection: {x: 0, y: 1, z: 0}
   impulseForce: 11
   mRenderer: {fileID: 4186439303133220315}

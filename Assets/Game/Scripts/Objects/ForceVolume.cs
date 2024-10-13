@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public enum ForceType
 {
@@ -8,16 +10,52 @@ public enum ForceType
 
 public class ForceVolume : MonoBehaviour
 {
-    [SerializeField] private new Collider collider;
+    [SerializeField] private Collider collider;
+    [SerializeField] private ParticleSystem particleSystem;
+    [Header("Force")]
     [SerializeField] private ForceType forceType;
     [SerializeField] private Vector3 direction;
     [SerializeField] private float strength;
+    [Header("Horizontal Random Direction")]
+    [SerializeField] private bool isRandom;
+    [SerializeField] private float randomTime;
+    
+    private float _randomTime;
 
     private void Start()
     {
         if (!collider) Debug.LogError("<Color=Red><a>Missing</a></Color> Collider Component on ForceVolume.", this);
+        _randomTime = randomTime;
+        SyncParticles();
     }
 
+    private void Update()
+    {
+        if(!isRandom) return;
+        _randomTime -= Time.deltaTime;
+     
+        if (_randomTime > 0) return;
+        direction = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized;
+        SyncParticles();
+        _randomTime = randomTime;
+    }
+
+    private void SyncParticles()
+    {
+        if (!particleSystem || forceType != ForceType.Force) return;
+        
+        var shape = particleSystem.shape;
+        shape.scale = collider.bounds.size;
+        
+        var velocityOverLifetime = particleSystem.velocityOverLifetime;
+        velocityOverLifetime.xMultiplier = direction.x * strength;
+        velocityOverLifetime.zMultiplier = direction.z * strength;
+
+        if (particleSystem.main.loop) return;
+        var main = particleSystem.main;
+        main.loop = true;
+    }
+    
     private void OnCollisionEnter(Collision other)
     {
         if (!other.gameObject.CompareTag("Player") || forceType != ForceType.Impulse) return;
@@ -37,7 +75,7 @@ public class ForceVolume : MonoBehaviour
         Gizmos.color = Color.cyan;
         if (collider.transform == null) return;
         
-        Gizmos.DrawRay(collider.bounds.center, direction);
+        Gizmos.DrawRay(collider.bounds.center, direction * strength);
         Gizmos.DrawIcon(collider.bounds.center, "science.png", true);
     }
 }

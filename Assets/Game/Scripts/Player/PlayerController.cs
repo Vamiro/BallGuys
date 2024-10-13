@@ -1,12 +1,14 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region Private Fields
 
+    [FormerlySerializedAs("cameraWork")]
     [Tooltip("Follow camera work for this player")]
-    [SerializeField] private CameraWork cameraWork;
+    [SerializeField] private CameraWorkComponent cameraWorkComponent;
 
     [Header("Movement Settings")]
     [SerializeField] private Rigidbody rb;
@@ -38,9 +40,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Start()
     {
         if (!photonView.IsMine) return;
-        if (cameraWork != null)
+        if (cameraWorkComponent != null)
         {
-            cameraWork.OnStartFollowing();
+            cameraWorkComponent.OnStartFollowing();
         }
         else
         {
@@ -48,7 +50,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         ProcessInputs();
     }
@@ -64,12 +66,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             GameManager.Instance.LeaveRoom();
         }
 
-        if (cameraWork.CameraTransform)
+        if (cameraWorkComponent.CameraTransform)
         {
             float vertical = Input.GetAxis("Vertical");
             float horizontal = Input.GetAxis("Horizontal");
-            var force = cameraWork.CameraTransform.forward * vertical +
-                        cameraWork.CameraTransform.right * horizontal;
+            var force = cameraWorkComponent.CameraTransform.forward * vertical +
+                        cameraWorkComponent.CameraTransform.right * horizontal;
             force.y = 0;
             rb.AddForce(force * speed);
 
@@ -81,7 +83,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         if(Input.GetMouseButton(1)){
-            cameraWork.RotateAround(Input.GetAxis("Mouse X"));
+            cameraWorkComponent.RotateAround(Input.GetAxis("Mouse X"));
         }
     }
     

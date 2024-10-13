@@ -10,7 +10,7 @@ public enum ActionStatus
     CoolingDown
 }
 
-public class TimingAction : MonoBehaviourPunCallbacks
+public class TimingActionComponent : MonoBehaviourPunCallbacks
 {
     [Tooltip("Time to wait before executing the action")] [SerializeField]
     private float timeToWait;
