@@ -1,6 +1,3 @@
-using System;
-using Photon.Pun;
-using UnityEditor;
 using UnityEngine;
 
 public enum RotationAxis
@@ -12,11 +9,15 @@ public enum RotationAxis
 
 public class Rotator : MonoBehaviour
 {
-    public Rigidbody rb;
-    
-    public RotationAxis rotationAxis;
-    public float speed;
-    
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private RotationAxis rotationAxis;
+    [SerializeField] private float speed;
+
+    private void Start()
+    {
+        if (!rb) Debug.LogError("<Color=Red><a>Missing</a></Color> Rigidbody Component on Rotator.", this);
+    }
+
     void Update()
     {
         switch (rotationAxis)

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraWork : MonoBehaviour
@@ -26,12 +24,12 @@ public class CameraWork : MonoBehaviour
         // [SerializeField]
         // private float smoothSpeed = 0.125f;
 
-        Transform cameraTransform;
-        bool isFollowing;
+        private Transform cameraTransform;
+        private bool isFollowing;
 
         // Cache for camera offset
-        Vector3 cameraOffset = Vector3.zero;
-        Vector3 initialCameraOffset = Vector3.zero;
+        private Vector3 cameraOffset = Vector3.zero;
+        private Vector3 initialCameraOffset = Vector3.zero;
 
         #endregion
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2869361192055636949}
   - component: {fileID: 3643806377394242993}
   - component: {fileID: 405494719756794374}
-  - component: {fileID: 2376328389840485687}
+  - component: {fileID: 6520285026693906938}
   - component: {fileID: 857282359831646451}
   - component: {fileID: -2004925364296395365}
   - component: {fileID: 5917769572939484388}
@@ -117,14 +117,14 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &2376328389840485687
+--- !u!135 &6520285026693906938
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2953382677620378216}
-  m_Material: {fileID: 13400000, guid: 2848dc2678902504190962b34d55f253, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -136,8 +136,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.040829
-  m_Center: {x: 0, y: 0, z: -0.000000059604645}
+  m_Radius: 0.5204145
+  m_Center: {x: 0, y: 0, z: -0.000000029802322}
 --- !u!114 &857282359831646451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraWork: {fileID: 1081259356329394300}
   rb: {fileID: 405494719756794374}
-  speed: 4
-  maxSpeed: 20
+  speed: 3
+  maxSpeed: 10
 --- !u!114 &1081259356329394300
 MonoBehaviour:
   m_ObjectHideFlags: 0

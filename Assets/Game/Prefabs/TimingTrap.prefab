@@ -32,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 39.07157, y: -2.07, z: -49.83}
-  m_LocalScale: {x: 4.27, y: 4.27, z: 4.27}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 2, y: 0.1209, z: 2}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 621c21b8ef0fbe54fb5a8e6cc98fae0e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124905fdd2386db439ccccc292a2d4eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToWait: 1
+  timeToWait: 5
   cooldown: 5
 --- !u!114 &4151499283324424246
 MonoBehaviour:
@@ -156,5 +156,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1352a05c37cf2984f9d7bf97f07bfb22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timingAction: {fileID: 779523028395934672}
   impulseDirection: {x: 0, y: 1, z: 0}
-  impulseForce: 10
+  impulseForce: 11
+  mRenderer: {fileID: 4186439303133220315}
+  sleepingMaterial: {fileID: 2100000, guid: 621c21b8ef0fbe54fb5a8e6cc98fae0e, type: 2}
+  waitingMaterial: {fileID: 2100000, guid: 520a14b530dc2174ea5b186084a26759, type: 2}
+  actionMaterial: {fileID: 2100000, guid: f780cd4c94ff7db4a939503e25ebfc26, type: 2}
+  coolingDownMaterial: {fileID: 2100000, guid: 02214af890c244e48bfda33feb9fb527, type: 2}

@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Game.Scripts;
 using Game.Scripts.Utilities;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,7 +18,7 @@ public class GameManager : SingletonPunCallbacks<GameManager>
     {
 #if UNITY_5_4_OR_NEWER
         // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
 #endif
         if (playerPrefab == null)
         {
@@ -66,7 +61,7 @@ public class GameManager : SingletonPunCallbacks<GameManager>
     {
         // Always call the base to remove callbacks
         base.OnDisable ();
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 #endif
     

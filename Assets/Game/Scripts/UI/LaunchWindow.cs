@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LaunchWindow : BaseWindow
@@ -35,8 +31,8 @@ public class LaunchWindow : BaseWindow
     {
         launcher.Connect();
     }
-    
-    public void OnPlayerNameFieldChanged(string value)
+
+    private void OnPlayerNameFieldChanged(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
@@ -48,17 +44,11 @@ public class LaunchWindow : BaseWindow
         PlayerPrefs.SetString(playerNamePrefKey,value);
     }
 
-    public void InitializeNameField()
+    private void InitializeNameField()
     {
-        string defaultName = string.Empty;
-        if (playerNameInputField!=null)
-        {
-            if (PlayerPrefs.HasKey(playerNamePrefKey))
-            {
-                defaultName = PlayerPrefs.GetString(playerNamePrefKey);
-                playerNameInputField.text = defaultName;
-            }
-        }
+        if (playerNameInputField == null || !PlayerPrefs.HasKey(playerNamePrefKey)) return;
+        var defaultName = PlayerPrefs.GetString(playerNamePrefKey);
+        playerNameInputField.text = defaultName;
     }
 
     protected override void OnHide()

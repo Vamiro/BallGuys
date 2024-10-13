@@ -1,55 +1,86 @@
-using Game.Scripts;
 using UnityEngine;
 
-[RequireComponent(typeof(TimingAction), typeof(Collider), typeof(Renderer))]
+[RequireComponent(typeof(TimingAction))]
 public class ImpulseTrap : MonoBehaviour
 {
-    public Rigidbody playerRb;
-    public Vector3 impulseDirection;
-    public float impulseForce;
+    [SerializeField] private TimingAction timingAction;
     
-    private TimingAction _timingAction;
-    private Renderer _renderer;
+    [Header("Impulse")]
+    [SerializeField] private Vector3 impulseDirection;
+    [SerializeField] private float impulseForce;
+    
+    [Header("Renderer")]
+    [SerializeField] private Renderer mRenderer;
+    [SerializeField] private Material sleepingMaterial;
+    [SerializeField] private Material waitingMaterial;
+    [SerializeField] private Material actionMaterial;
+    [SerializeField] private Material coolingDownMaterial;
+
+    private Rigidbody _playerRb;
 
     void Start()
     {
-        _timingAction = GetComponent<TimingAction>();
-        _renderer = GetComponent<Renderer>();
-        _renderer.material.color = Color.green;
-        _timingAction.OnSleeping += () =>
-        {
-            _renderer.material.color = Color.green;
-            if (playerRb) _timingAction.Activate();
-        };
-        _timingAction.OnWaiting += () => _renderer.material.color = Color.yellow;
-        _timingAction.Action += ThrowPlayer;
-        _timingAction.OnCoolingDown += () => _renderer.material.color = Color.blue;
+        mRenderer.material = sleepingMaterial;
+
+        timingAction.OnSleeping -= TimingActionOnSleeping;
+        timingAction.OnSleeping += TimingActionOnSleeping;
+        
+        timingAction.OnWaiting -= TimingActionOnWaiting;
+        timingAction.OnWaiting += TimingActionOnWaiting;
+        
+        timingAction.OnAction -= ThrowPlayer;
+        timingAction.OnAction += ThrowPlayer;
+        
+        timingAction.OnCoolingDown -= TimingActionOnCoolingDown;
+        timingAction.OnCoolingDown += TimingActionOnCoolingDown;
     }
-    
+
+    private void OnDestroy()
+    {
+        timingAction.OnSleeping -= TimingActionOnSleeping;
+        timingAction.OnWaiting -= TimingActionOnWaiting;
+        timingAction.OnAction -= ThrowPlayer;
+        timingAction.OnCoolingDown -= TimingActionOnCoolingDown;
+    }
+
+    private void TimingActionOnSleeping()
+    {
+        mRenderer.material = sleepingMaterial;
+
+        if (!_playerRb) return;
+        timingAction.Activate();
+    }
+
+    private void TimingActionOnWaiting()
+    {
+        mRenderer.material = waitingMaterial;
+    }
+
+    private void ThrowPlayer()
+    {
+        mRenderer.material = actionMaterial;
+        if (!_playerRb) return;
+        _playerRb.AddForce(impulseDirection.normalized * impulseForce, ForceMode.Impulse);
+    }
+
+    private void TimingActionOnCoolingDown()
+    {
+        mRenderer.material = coolingDownMaterial;
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         if (!other.gameObject.CompareTag("Player") || PlayerController.LocalPlayerInstance != other.gameObject) return;
-        
-        playerRb = other.gameObject.GetComponent<Rigidbody>();
-        _timingAction.Activate();
+        _playerRb = other.gameObject.GetComponent<Rigidbody>();
+        timingAction.Activate();
     }
-    
+
     private void OnCollisionExit(Collision other)
     {
-        if (other.gameObject.CompareTag("Player") && PlayerController.LocalPlayerInstance == other.gameObject)
-        {
-            playerRb = null;
-        }
+        if (!other.gameObject.CompareTag("Player") || PlayerController.LocalPlayerInstance != other.gameObject) return;
+        _playerRb = null;
     }
-    
-    private void ThrowPlayer()
-    {
-        _renderer.material.color = Color.red;
-        if (playerRb)
-        {
-            playerRb.AddForce(impulseDirection.normalized * impulseForce, ForceMode.Impulse);
-        }
-    }
+
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;

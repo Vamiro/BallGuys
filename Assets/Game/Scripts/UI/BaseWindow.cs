@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BaseWindow : MonoBehaviour
 {
-    public bool IsActive { get; private set; }
+    protected bool IsActive { get; private set; }
 
     public void Show()
     {

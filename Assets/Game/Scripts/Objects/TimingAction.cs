@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,48 +12,66 @@ public enum ActionStatus
 
 public class TimingAction : MonoBehaviourPunCallbacks
 {
-    [Tooltip("Time to wait before executing the action")]
-    public float timeToWait;
+    [Tooltip("Time to wait before executing the action")] [SerializeField]
+    private float timeToWait;
     private float _currentTimeToWait;
 
-    [Tooltip("Cooldown time after executing the action")]
-    public float cooldown;
+    [Tooltip("Cooldown time after executing the action")] [SerializeField]
+    private float cooldown;
     private float _currentCooldown;
-
-    public UnityAction OnSleeping;
-    public UnityAction OnWaiting;
-    public UnityAction Action;
-    public UnityAction OnCoolingDown;
     
     private ActionStatus _status = ActionStatus.Sleeping;
     
+    public UnityAction OnSleeping;
+    public UnityAction OnWaiting;
+    public UnityAction OnAction;
+    public UnityAction OnCoolingDown;
+
     private void Update()
     {
         switch (_status)
         {
             case ActionStatus.Sleeping:
                 break;
+
             case ActionStatus.Waiting:
                 _currentTimeToWait -= Time.deltaTime;
-                if (_currentTimeToWait <= 0)
+                if (_currentTimeToWait > 0) break;
+
+                _status = cooldown > 0 ? ActionStatus.CoolingDown : ActionStatus.Sleeping;
+                _currentCooldown = cooldown;
+
+                try
                 {
-                    _status = cooldown > 0 ? ActionStatus.CoolingDown : ActionStatus.Sleeping;
-                    _currentCooldown = cooldown;
-                    Action?.Invoke();
+                    OnAction?.Invoke();
                     OnCoolingDown?.Invoke();
                 }
-                break;
-            case ActionStatus.CoolingDown:
-                _currentCooldown -= Time.deltaTime;
-                if (_currentCooldown <= 0)
+                catch (Exception e)
                 {
-                    _status = ActionStatus.Sleeping;
-                    OnSleeping?.Invoke();
+                    throw new Exception("Error invoking action events: " + e.Message);
                 }
                 break;
+
+            case ActionStatus.CoolingDown:
+                _currentCooldown -= Time.deltaTime;
+                if (_currentCooldown > 0) break;
+                _status = ActionStatus.Sleeping;
+                
+                try
+                {
+                    OnSleeping?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error invoking sleeping events: " + e.Message);
+                }
+                break;
+
+            default:
+                throw new Exception("Invalid ActionStatus");
         }
     }
-    
+
     [PunRPC]
     public void Activate()
     {
