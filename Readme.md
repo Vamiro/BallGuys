@@ -28,6 +28,7 @@ https://github.com/user-attachments/assets/431790e2-a9ac-444b-8ad2-f6d8e66071d4
 12. [Launcher](#launcher)
 13. [LaunchWindow](#launchwindow)
 14. [ForceVolume](#forcevolume)
+15. [Пояснения](#пояснения)
 
 ## GameManager
 `GameManager` управляет основными игровыми процессами, такими как создание игрока и обработка загрузки сцен.
