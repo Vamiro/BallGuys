@@ -22,7 +22,7 @@ public class LaunchWindow : BaseWindow
         InitializeNameField();
     }
 
-    protected override void OnShow()
+    protected override void OnShow(params object[] args)
     {
         
     }

@@ -1,4 +1,5 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -8,10 +9,10 @@ public enum ForceType
     Impulse
 }
 
-public class ForceVolume : MonoBehaviour
+public class ForceVolume : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private Collider collider;
-    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private new Collider collider;
+    [SerializeField] private new ParticleSystem particleSystem;
     [Header("Force")]
     [SerializeField] private ForceType forceType;
     [SerializeField] private Vector3 direction;
@@ -31,13 +32,20 @@ public class ForceVolume : MonoBehaviour
 
     private void Update()
     {
-        if(!isRandom) return;
+        if(!photonView.IsRoomView || !isRandom) return;
         _randomTime -= Time.deltaTime;
-     
+        
         if (_randomTime > 0) return;
-        direction = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized;
-        SyncParticles();
+        photonView.RPC(nameof(ChangeDirection), RpcTarget.All,
+            new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized);
         _randomTime = randomTime;
+    }
+
+    [PunRPC]
+    private void ChangeDirection(Vector3 newDirection)
+    {
+        direction = newDirection;
+        SyncParticles();
     }
 
     private void SyncParticles()

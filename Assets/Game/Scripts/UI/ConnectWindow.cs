@@ -13,13 +13,11 @@ public class ConnectWindow : BaseWindow
         }
     }
 
-    protected override void OnShow()
+    protected override void OnShow(params object[] args)
     {
-        
     }
-    
+
     protected override void OnHide()
     {
-        
     }
 }

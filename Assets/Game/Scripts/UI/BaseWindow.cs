@@ -4,11 +4,11 @@ public abstract class BaseWindow : MonoBehaviour
 {
     protected bool IsActive { get; private set; }
 
-    public void Show()
+    public void Show(params object[] args)
     {
         gameObject.SetActive(true);
         IsActive = true;
-        OnShow();
+        OnShow(args);
     }
 
     public void Hide()
@@ -18,6 +18,6 @@ public abstract class BaseWindow : MonoBehaviour
         gameObject.SetActive(false);
     }
     
-    protected abstract void OnShow();
+    protected abstract void OnShow(params object[] args);
     protected abstract void OnHide();
 }

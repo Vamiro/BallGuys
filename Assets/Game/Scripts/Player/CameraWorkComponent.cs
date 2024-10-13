@@ -105,7 +105,7 @@ public class CameraWorkComponent : MonoBehaviour
         #region Private Methods
 
         /// <summary>
-        /// Follow the target smoothly
+        /// Follow the target
         /// </summary>
         void Follow()
         {
