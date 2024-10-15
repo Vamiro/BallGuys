@@ -219,9 +219,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5508c9b2de71fb94b98a190359192d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayersPerRoom: 3
   launchWindow: {fileID: 2021378582}
   connectWindow: {fileID: 1956676579}
+  maxPlayers: 4
+  minPlayers: 1
+  timeToWait: 2
 --- !u!4 &481320088
 Transform:
   m_ObjectHideFlags: 0
@@ -1379,7 +1381,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1707585798}
   m_OnClick:
     m_PersistentCalls:
@@ -1532,7 +1534,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 1707585797}
-  launcher: {fileID: 481320087}
   playerNameInputField: {fileID: 1195959116}
 --- !u!222 &2021378583
 CanvasRenderer:

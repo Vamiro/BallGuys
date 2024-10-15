@@ -1,25 +1,23 @@
+using Game.Scripts.UI;
 using Game.Scripts.Utilities;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonPunCallbacks<GameManager>
 {
-    #region Public Fields
-    
     [Tooltip("The prefab to use for representing the player")]
     public GameObject playerPrefab;
     
-    #endregion
-    
-    #region MonoBehaviour Callbacks
-    
+    [SerializeField] private WinWindow winWindow;
     private void Start()
     {
 #if UNITY_5_4_OR_NEWER
         // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
         SceneManager.sceneLoaded += OnSceneLoaded;
 #endif
+        
         if (playerPrefab == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'",this);
@@ -37,8 +35,42 @@ public class GameManager : SingletonPunCallbacks<GameManager>
                 Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
             }
         }
+        
+        winWindow.OnExit += LeaveRoom;
+    }
+
+    public void Win()
+    {
+        ShowWinWindow(PhotonNetwork.NickName);
+        photonView.RPC(nameof(ShowWinWindow), RpcTarget.Others, PhotonNetwork.NickName);
     }
     
+    [PunRPC]
+    private void ShowWinWindow(string winner)
+    {
+        winWindow.Show(winner);
+    }
+
+    public override void OnLeftRoom()
+    {
+        if (PlayerController.LocalPlayerInstance)
+        {
+            PhotonNetwork.Destroy(PlayerController.LocalPlayerInstance);
+        }
+        
+        SceneManager.LoadScene(0);
+    }
+
+    public void LeaveRoom()
+    {
+        if (PlayerController.LocalPlayerInstance)
+        {
+            PhotonNetwork.Destroy(PlayerController.LocalPlayerInstance);
+        }
+        Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " players in room");
+        PhotonNetwork.LeaveRoom();
+    }
+
 #if !UNITY_5_4_OR_NEWER
     /// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>
     void OnLevelWasLoaded(int level)
@@ -65,37 +97,10 @@ public class GameManager : SingletonPunCallbacks<GameManager>
     }
 #endif
     
-    #endregion
-    
-    #region Private Methods
-    
 #if UNITY_5_4_OR_NEWER
     void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
     {
         this.CalledOnLevelWasLoaded(scene.buildIndex);
     }
 #endif
-
-    #endregion
-    
-    #region Photon Callbacks
-    
-    /// <summary>
-    /// Called when the local player left the room. We need to load the launcher scene.
-    /// </summary>
-    public override void OnLeftRoom()
-    {
-        SceneManager.LoadScene(0);
-    }
-
-    #endregion
-
-    #region Public Methods
-
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
-    }
-
-    #endregion
 }

@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private float speed = 2;
     [SerializeField] private float maxSpeed = 10;
     
+    [Header("Gameplay Settings")]
+    [SerializeField] private Vector3 spawnPoint;
+    
     #endregion
 
     #region Public Fields
@@ -53,6 +56,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void FixedUpdate()
     {
         ProcessInputs();
+
+        if (transform.position.y is < -100 or > 100)
+        {
+            Respawn();
+        }
     }
 
     #endregion
@@ -88,7 +96,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     }
     
     #endregion
-    
+
+    #region Public Methods
+
+    public void Respawn()
+    {
+        transform.position = spawnPoint;
+    }
+
+    public void SetSpawnPoint(Vector3 point)
+    {
+        spawnPoint = point;
+    }
+
+    #endregion
+
     #region IPunObservable implementation
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

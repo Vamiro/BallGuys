@@ -1,19 +1,23 @@
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 public class LaunchWindow : BaseWindow
 {
+    private const string PlayerNamePrefKey = "PlayerName";
+    
     [SerializeField] private Button playButton;
-    [SerializeField] private Launcher launcher;
     [SerializeField] private TMP_InputField playerNameInputField;
-
-    const string playerNamePrefKey = "PlayerName";
+    
+    public Button PlayButton => playButton;
+    public UnityAction OnPlay;
 
     private void Awake()
     {
-        playButton.onClick.AddListener(OnPlayButtonClicked);
+        playButton.onClick.AddListener(() => OnPlay?.Invoke());
         playerNameInputField.onValueChanged.AddListener(OnPlayerNameFieldChanged);
     }
 
@@ -26,11 +30,6 @@ public class LaunchWindow : BaseWindow
     {
         
     }
-    
-    private void OnPlayButtonClicked()
-    {
-        launcher.Connect();
-    }
 
     private void OnPlayerNameFieldChanged(string value)
     {
@@ -41,14 +40,19 @@ public class LaunchWindow : BaseWindow
         }
         PhotonNetwork.NickName = value;
 
-        PlayerPrefs.SetString(playerNamePrefKey,value);
+        PlayerPrefs.SetString(PlayerNamePrefKey,value);
     }
 
     private void InitializeNameField()
     {
-        if (playerNameInputField == null || !PlayerPrefs.HasKey(playerNamePrefKey)) return;
-        var defaultName = PlayerPrefs.GetString(playerNamePrefKey);
-        playerNameInputField.text = defaultName;
+        if (PlayerPrefs.HasKey(PlayerNamePrefKey))
+        {
+            playerNameInputField.text = PlayerPrefs.GetString(PlayerNamePrefKey);
+        }
+        else
+        {
+            playerNameInputField.text = "Player" + Random.Range(1000, 10000);
+        }
     }
 
     protected override void OnHide()
@@ -58,7 +62,7 @@ public class LaunchWindow : BaseWindow
     
     private void OnDestroy()
     {
-        playButton.onClick.RemoveListener(OnPlayButtonClicked);
+        playButton.onClick.RemoveListener(() => OnPlay?.Invoke());
         playerNameInputField.onValueChanged.RemoveListener(OnPlayerNameFieldChanged);
     }
 }
