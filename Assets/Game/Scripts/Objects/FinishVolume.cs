@@ -2,11 +2,11 @@ using Game.Scripts.UI;
 using Photon.Pun;
 using UnityEngine;
 
-public class FinishVolume : MonoBehaviourPunCallbacks
+public class FinishVolume : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") || !photonView.IsMine) return;
+        if (!other.CompareTag("Player")) return;
         GameManager.Instance.Win();
     }
 }

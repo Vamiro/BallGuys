@@ -41,8 +41,8 @@ public class GameManager : SingletonPunCallbacks<GameManager>
 
     public void Win()
     {
+        if (!photonView.IsMine) return;
         ShowWinWindow(PhotonNetwork.NickName);
-        if (PhotonNetwork.CountOfPlayers <= 1) return;
         photonView.RPC(nameof(ShowWinWindow), RpcTarget.Others, PhotonNetwork.NickName);
     }
     
