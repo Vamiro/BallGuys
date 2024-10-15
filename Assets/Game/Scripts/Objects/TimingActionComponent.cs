@@ -12,11 +12,11 @@ public enum ActionStatus
 
 public class TimingActionComponent : MonoBehaviourPunCallbacks
 {
-    [Tooltip("Time to wait before executing the action")] [SerializeField]
+    [Tooltip("Time to wait before executing the action"), SerializeField]
     private float timeToWait;
     private float _currentTimeToWait;
 
-    [Tooltip("Cooldown time after executing the action")] [SerializeField]
+    [Tooltip("Cooldown time after executing the action"), SerializeField]
     private float cooldown;
     private float _currentCooldown;
     
@@ -48,7 +48,7 @@ public class TimingActionComponent : MonoBehaviourPunCallbacks
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Error invoking action events: " + e.Message);
+                    Debug.LogException(e);
                 }
                 break;
 
@@ -63,12 +63,12 @@ public class TimingActionComponent : MonoBehaviourPunCallbacks
                 }
                 catch (Exception e)
                 {
-                    throw new Exception("Error invoking sleeping events: " + e.Message);
+                    Debug.LogException(e);
                 }
                 break;
 
             default:
-                throw new Exception("Invalid ActionStatus");
+                throw new ArgumentOutOfRangeException();
         }
     }
 

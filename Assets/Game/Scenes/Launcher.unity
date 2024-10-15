@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5508c9b2de71fb94b98a190359192d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayersPerRoom: 2
+  maxPlayersPerRoom: 3
   launchWindow: {fileID: 2021378582}
   connectWindow: {fileID: 1956676579}
 --- !u!4 &481320088

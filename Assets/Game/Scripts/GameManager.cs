@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : SingletonPunCallbacks<GameManager>
 {
     #region Public Fields
-
+    
     [Tooltip("The prefab to use for representing the player")]
     public GameObject playerPrefab;
     
     #endregion
-
+    
     #region MonoBehaviour Callbacks
     
     private void Start()

@@ -119,8 +119,14 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("No random room available, creating a new room.");
-        CreateRoom();
-        
+        if (PhotonNetwork.CountOfRooms == 0)
+        {
+            CreateRoom();
+        }
+        else
+        {
+            PhotonNetwork.JoinRandomRoom();
+        }
     }
 
     public override void OnJoinedRoom()
@@ -149,5 +155,4 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     
     #endregion
-
 }
