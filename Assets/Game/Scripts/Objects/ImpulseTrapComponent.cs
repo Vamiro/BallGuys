@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,10 +19,13 @@ public class ImpulseTrapComponent : MonoBehaviour
     [SerializeField] private Material coolingDownMaterial;
 
     private Rigidbody _playerRb;
-
+    private Material[] _materials;
     void Start()
     {
-        mRenderer.material = sleepingMaterial;
+        
+        _materials = mRenderer.materials;
+        _materials[1] = sleepingMaterial;
+        mRenderer.materials = _materials;
 
         timingActionComponent.OnSleeping -= TimingActionOnSleeping;
         timingActionComponent.OnSleeping += TimingActionOnSleeping;
@@ -46,7 +50,9 @@ public class ImpulseTrapComponent : MonoBehaviour
 
     private void TimingActionOnSleeping()
     {
-        mRenderer.material = sleepingMaterial;
+        _materials = mRenderer.materials;
+        _materials[1] = sleepingMaterial;
+        mRenderer.materials = _materials;
 
         if (!_playerRb) return;
         timingActionComponent.Activate();
@@ -54,19 +60,25 @@ public class ImpulseTrapComponent : MonoBehaviour
 
     private void TimingActionOnWaiting()
     {
-        mRenderer.material = waitingMaterial;
+        _materials = mRenderer.materials;
+        _materials[1] = waitingMaterial;
+        mRenderer.materials = _materials;
     }
 
     private void ThrowPlayer()
     {
-        mRenderer.material = actionMaterial;
+        _materials = mRenderer.materials;
+        _materials[1] = actionMaterial;
+        mRenderer.materials = _materials;
         if (!_playerRb) return;
         _playerRb.AddForce(impulseDirection.normalized * impulseForce, ForceMode.Impulse);
     }
 
     private void TimingActionOnCoolingDown()
     {
-        mRenderer.material = coolingDownMaterial;
+        _materials = mRenderer.materials;
+        _materials[1] = coolingDownMaterial;
+        mRenderer.materials = _materials;
     }
 
     private void OnCollisionEnter(Collision other)

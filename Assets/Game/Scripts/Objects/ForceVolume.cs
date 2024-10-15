@@ -74,7 +74,7 @@ public class ForceVolume : MonoBehaviourPunCallbacks
     private void OnTriggerStay(Collider other)
     {
         if (!other.gameObject.CompareTag("Player") || forceType != ForceType.Force) return;
-        
+        Debug.Log("Addin force");
         other.gameObject.GetComponent<Rigidbody>().AddForce(direction.normalized * strength, ForceMode.Force);
     }
 

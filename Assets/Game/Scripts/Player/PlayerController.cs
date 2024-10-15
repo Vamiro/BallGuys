@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Rigidbody), typeof(CameraWorkComponent))]
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region Private Fields
@@ -43,14 +44,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Start()
     {
         if (!photonView.IsMine) return;
-        if (cameraWorkComponent != null)
-        {
-            cameraWorkComponent.OnStartFollowing();
-        }
-        else
-        {
-            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
-        }
+        cameraWorkComponent.OnStartFollowing();
+
     }
 
     private void FixedUpdate()
@@ -74,22 +69,20 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             GameManager.Instance.LeaveRoom();
         }
 
-        if (cameraWorkComponent.CameraTransform)
-        {
-            float vertical = Input.GetAxis("Vertical");
-            float horizontal = Input.GetAxis("Horizontal");
-            var force = cameraWorkComponent.CameraTransform.forward * vertical +
-                        cameraWorkComponent.CameraTransform.right * horizontal;
-            force.y = 0;
-            rb.AddForce(force * speed);
+        if (!cameraWorkComponent.CameraTransform) return;
 
-            rb.velocity = new Vector3(
-                Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed),
-                rb.velocity.y,
-                Mathf.Clamp(rb.velocity.z, -maxSpeed, maxSpeed)
-            );
-        }
-
+        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
+        var force = cameraWorkComponent.CameraTransform.forward * vertical +
+                    cameraWorkComponent.CameraTransform.right * horizontal;
+        force.y = 0;
+        rb.AddForce(force * speed);
+        rb.velocity = new Vector3(
+            Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed),
+            rb.velocity.y,
+            Mathf.Clamp(rb.velocity.z, -maxSpeed, maxSpeed)
+        );
+        
         if(Input.GetMouseButton(1)){
             cameraWorkComponent.RotateAround(Input.GetAxis("Mouse X"));
         }
@@ -101,6 +94,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     public void Respawn()
     {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         transform.position = spawnPoint;
     }
 

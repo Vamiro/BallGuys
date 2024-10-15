@@ -223,7 +223,7 @@ MonoBehaviour:
   connectWindow: {fileID: 1956676579}
   maxPlayers: 4
   minPlayers: 1
-  timeToWait: 2
+  timeToWait: 5
 --- !u!4 &481320088
 Transform:
   m_ObjectHideFlags: 0
