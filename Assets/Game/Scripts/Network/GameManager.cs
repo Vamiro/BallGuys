@@ -41,9 +41,7 @@ public class GameManager : SingletonPunCallbacks<GameManager>
 
     public void Win()
     {
-        if (!photonView.IsMine) return;
-        ShowWinWindow(PhotonNetwork.NickName);
-        photonView.RPC(nameof(ShowWinWindow), RpcTarget.Others, PhotonNetwork.NickName);
+        photonView.RPC(nameof(ShowWinWindow), RpcTarget.All, PhotonNetwork.NickName);
     }
     
     [PunRPC]
@@ -68,6 +66,7 @@ public class GameManager : SingletonPunCallbacks<GameManager>
         {
             PhotonNetwork.Destroy(PlayerController.LocalPlayerInstance);
         }
+        
         Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount + " players in room");
         PhotonNetwork.LeaveRoom();
     }

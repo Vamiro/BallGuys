@@ -18,7 +18,7 @@ public class LaunchWindow : BaseWindow
     private void Awake()
     {
         playButton.onClick.AddListener(() => OnPlay?.Invoke());
-        playerNameInputField.onValueChanged.AddListener(OnPlayerNameFieldChanged);
+        playerNameInputField.onDeselect.AddListener(OnPlayerNameFieldDeselected);
     }
 
     private void Start()
@@ -30,29 +30,30 @@ public class LaunchWindow : BaseWindow
     {
         
     }
-
-    private void OnPlayerNameFieldChanged(string value)
+    
+    private void OnPlayerNameFieldDeselected(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
-            Debug.LogError("Player Name is null or empty");
-            return;
+            value = "Player" + Random.Range(1000, 10000);
         }
+        
+        playerNameInputField.text = value;
         PhotonNetwork.NickName = value;
-
         PlayerPrefs.SetString(PlayerNamePrefKey,value);
     }
 
     private void InitializeNameField()
     {
-        if (PlayerPrefs.HasKey(PlayerNamePrefKey))
+        var nickName = PlayerPrefs.GetString(PlayerNamePrefKey);
+        if (nickName.IsNullOrEmpty())
         {
-            playerNameInputField.text = PlayerPrefs.GetString(PlayerNamePrefKey);
+            nickName = "Player" + Random.Range(1000, 10000);
+            PlayerPrefs.SetString(PlayerNamePrefKey, nickName);
         }
-        else
-        {
-            playerNameInputField.text = "Player" + Random.Range(1000, 10000);
-        }
+        
+        playerNameInputField.text = nickName;
+        PhotonNetwork.NickName = nickName;
     }
 
     protected override void OnHide()
@@ -63,6 +64,6 @@ public class LaunchWindow : BaseWindow
     private void OnDestroy()
     {
         playButton.onClick.RemoveListener(() => OnPlay?.Invoke());
-        playerNameInputField.onValueChanged.RemoveListener(OnPlayerNameFieldChanged);
+        playerNameInputField.onDeselect.RemoveListener(OnPlayerNameFieldDeselected);
     }
 }

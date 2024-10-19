@@ -1,5 +1,7 @@
 ﻿using Photon.Pun;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody), typeof(CameraWorkComponent))]
@@ -18,6 +20,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     
     [Header("Gameplay Settings")]
     [SerializeField] private Vector3 spawnPoint;
+    
+    [Header("Player Info")]
+    [SerializeField] private TMP_Text nicknameText;
     
     #endregion
 
@@ -43,15 +48,31 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Start()
     {
+        UpdateNickname();
+        
         if (!photonView.IsMine) return;
         cameraWorkComponent.OnStartFollowing();
+    }
 
+    private void UpdateNickname()
+    {
+        if (!nicknameText) return;
+        nicknameText.text = photonView.Owner.NickName;
+        if (Camera.main == null) return;
+        nicknameText.transform.rotation = Quaternion.Euler(0, 180, 0);
+        nicknameText.canvas.worldCamera = Camera.main;
+        nicknameText.canvas.GetComponent<LookAtConstraint>().AddSource(new ConstraintSource
+        {
+            sourceTransform = Camera.main.transform,
+            weight = 1
+        });
+        nicknameText.canvas.GetComponent<LookAtConstraint>().constraintActive = true;
     }
 
     private void FixedUpdate()
     {
         ProcessInputs();
-
+        nicknameText.canvas.transform.position = transform.position + Vector3.up;
         if (transform.position.y is < -100 or > 100)
         {
             Respawn();
@@ -108,9 +129,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     #region IPunObservable implementation
 
+
+    // Called by PUN, when this game object has been network instantiated with PhotonNetwork.Instantiate
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        
     }
 
     #endregion
