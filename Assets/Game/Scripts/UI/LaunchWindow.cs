@@ -10,14 +10,20 @@ public class LaunchWindow : BaseWindow
     private const string PlayerNamePrefKey = "PlayerName";
     
     [SerializeField] private Button playButton;
+    [SerializeField] private Button trainButton;
+    [SerializeField] private Button exitButton;
     [SerializeField] private TMP_InputField playerNameInputField;
     
     public Button PlayButton => playButton;
     public UnityAction OnPlay;
+    public Button TrainButton => trainButton;
+    public UnityAction OnTrain;
 
     private void Awake()
     {
         playButton.onClick.AddListener(() => OnPlay?.Invoke());
+        trainButton.onClick.AddListener(() => OnTrain?.Invoke());
+        exitButton.onClick.AddListener(Application.Quit);
         playerNameInputField.onDeselect.AddListener(OnPlayerNameFieldDeselected);
     }
 
@@ -64,6 +70,8 @@ public class LaunchWindow : BaseWindow
     private void OnDestroy()
     {
         playButton.onClick.RemoveListener(() => OnPlay?.Invoke());
+        trainButton.onClick.RemoveListener(() => OnTrain?.Invoke());
+        exitButton.onClick.RemoveListener(Application.Quit);
         playerNameInputField.onDeselect.RemoveListener(OnPlayerNameFieldDeselected);
     }
 }

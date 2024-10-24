@@ -21,19 +21,12 @@ public class RotatorComponent : MonoBehaviour
 
     void Update()
     {
-        switch (rotationAxis)
+        rb.angularVelocity = rotationAxis switch
         {
-            case RotationAxis.X:
-                rb.angularVelocity = transform.right * speed;
-                break;
-            case RotationAxis.Y:
-                rb.angularVelocity = transform.up * speed;
-                break;
-            case RotationAxis.Z:
-                rb.angularVelocity = transform.forward * speed;
-                break;
-            default:
-                throw new Exception("Invalid Rotation Axis");
-        }
+            RotationAxis.X => transform.right * speed,
+            RotationAxis.Y => transform.up * speed,
+            RotationAxis.Z => transform.forward * speed,
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 }

@@ -18,6 +18,9 @@ public class ImpulseTrapComponent : MonoBehaviour
     [SerializeField] private Material actionMaterial;
     [SerializeField] private Material coolingDownMaterial;
 
+    [Header("Visuals")]
+    [SerializeField] private ParticleSystem particleSystem;
+    
     private Rigidbody _playerRb;
     private Material[] _materials;
     void Start()
@@ -70,6 +73,9 @@ public class ImpulseTrapComponent : MonoBehaviour
         _materials = mRenderer.materials;
         _materials[1] = actionMaterial;
         mRenderer.materials = _materials;
+        
+        if (particleSystem) particleSystem.Play();
+        
         if (!_playerRb) return;
         _playerRb.AddForce(impulseDirection.normalized * impulseForce, ForceMode.Impulse);
     }

@@ -193,10 +193,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraWorkComponent: {fileID: 1081259356329394300}
   rb: {fileID: 405494719756794374}
-  speed: 4
-  maxSpeed: 12
-  spawnPoint: {x: 0, y: 2, z: 0}
+  speed: 7.5
+  maxSpeed: 10
   nicknameText: {fileID: 6734515885727206417}
+  spawnPoint:
+    Index: 0
+    Position: {x: 0, y: 3, z: 0}
 --- !u!114 &1081259356329394300
 MonoBehaviour:
   m_ObjectHideFlags: 0

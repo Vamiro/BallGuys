@@ -7,6 +7,6 @@ public class FinishVolume : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player") || other.gameObject != PlayerController.LocalPlayerInstance) return;
-        GameManager.Instance.Win();
+        GameManager.Instance.Finish();
     }
 }

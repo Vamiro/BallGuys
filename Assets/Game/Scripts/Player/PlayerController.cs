@@ -7,33 +7,22 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Rigidbody), typeof(CameraWorkComponent))]
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
-    #region Private Fields
+    [FormerlySerializedAs("cameraWork")] [Tooltip("Follow camera work for this player")] [SerializeField]
+    private CameraWorkComponent cameraWorkComponent;
 
-    [FormerlySerializedAs("cameraWork")]
-    [Tooltip("Follow camera work for this player")]
-    [SerializeField] private CameraWorkComponent cameraWorkComponent;
+    [Header("Movement Settings")] [SerializeField]
+    private Rigidbody rb;
 
-    [Header("Movement Settings")]
-    [SerializeField] private Rigidbody rb;
     [SerializeField] private float speed = 2;
     [SerializeField] private float maxSpeed = 10;
-    
-    [Header("Gameplay Settings")]
-    [SerializeField] private Vector3 spawnPoint;
-    
-    [Header("Player Info")]
-    [SerializeField] private TMP_Text nicknameText;
-    
-    #endregion
 
-    #region Public Fields
+    [Header("Player Info")] [SerializeField]
+    private TMP_Text nicknameText;
+
+    [Header("Gameplay Settings")] public SpawnPoint spawnPoint;
 
     [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
     public static GameObject LocalPlayerInstance;
-
-    #endregion
-    
-    #region MonoBehaviour Callbacks
 
     private void Awake()
     {
@@ -49,7 +38,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Start()
     {
         UpdateNickname();
-        
+
         if (!photonView.IsMine) return;
         cameraWorkComponent.OnStartFollowing();
     }
@@ -69,20 +58,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         nicknameText.canvas.GetComponent<LookAtConstraint>().constraintActive = true;
     }
 
+    private void Update()
+    {
+        if (nicknameText) nicknameText.canvas.transform.position = transform.position + Vector3.up;
+        if (transform.position.y is < -100 or > 100) Respawn();
+    }
+
     private void FixedUpdate()
     {
         ProcessInputs();
-        nicknameText.canvas.transform.position = transform.position + Vector3.up;
-        if (transform.position.y is < -100 or > 100)
-        {
-            Respawn();
-        }
     }
 
-    #endregion
-
-    #region Private Methods
-    
     private void ProcessInputs()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -96,6 +82,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         float horizontal = Input.GetAxis("Horizontal");
         var force = cameraWorkComponent.CameraTransform.forward * vertical +
                     cameraWorkComponent.CameraTransform.right * horizontal;
+
         force.y = 0;
         rb.AddForce(force * speed);
         rb.velocity = new Vector3(
@@ -103,37 +90,27 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             rb.velocity.y,
             Mathf.Clamp(rb.velocity.z, -maxSpeed, maxSpeed)
         );
-        
-        if(Input.GetMouseButton(1)){
+
+        if (Input.GetMouseButton(1))
+        {
             cameraWorkComponent.RotateAround(Input.GetAxis("Mouse X"));
         }
     }
-    
-    #endregion
-
-    #region Public Methods
 
     public void Respawn()
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        transform.position = spawnPoint;
+        transform.position = spawnPoint.Position;
     }
 
-    public void SetSpawnPoint(Vector3 point)
+    public void SetSpawnPoint(SpawnPoint point)
     {
         spawnPoint = point;
     }
-
-    #endregion
-
-    #region IPunObservable implementation
-
 
     // Called by PUN, when this game object has been network instantiated with PhotonNetwork.Instantiate
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
     }
-
-    #endregion
 }

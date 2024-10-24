@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1737820815199128640}
   - component: {fileID: 514628922113703349}
   - component: {fileID: 8932713091121426572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RotatingPlatform (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1489246098251715821}
   serializedVersion: 2
   m_LocalRotation: {x: 0.26375285, y: -0, z: 0.9645903, w: 0}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 10.5, z: 0}
   m_LocalScale: {x: 3.3333328, y: 10, z: 3.3333335}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,7 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9089460215051053929}
   - component: {fileID: 8828873001272912954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RotatingWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 4525275307578570089}
   - component: {fileID: 6509795690904166096}
   - component: {fileID: 1342800552903463101}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Props_5a
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,20 +251,20 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7985741175338993538}
-  m_Material: {fileID: 13400000, guid: 1d6d3285ceb961949b8250104db0cc4f, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 192
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.16452183, y: 0.97702014, z: 4.627401}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.26059324, y: 1.025177, z: 4.627401}
+  m_Center: {x: 0, y: -0.14408994, z: 0}
 --- !u!54 &4525275307578570089
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -273,7 +273,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7985741175338993538}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 1000
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -304,8 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
+  m_SynchronizeVelocity: 0
+  m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &1342800552903463101
@@ -342,7 +342,8 @@ GameObject:
   - component: {fileID: 9058591404038399640}
   - component: {fileID: 5056334773898709939}
   - component: {fileID: 2767614987695276057}
-  m_Layer: 0
+  - component: {fileID: 6294243465146794636}
+  m_Layer: 7
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,3 +418,26 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &6294243465146794636
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8030839535645518941}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.62
+  m_Direction: 1
+  m_Center: {x: 0.0000019073486, y: 0.34, z: 0.00000047683716}

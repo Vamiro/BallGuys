@@ -75,12 +75,10 @@ public class TimingActionComponent : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Activate()
     {
-        if (_status == ActionStatus.Sleeping)
-        {
-            _status = ActionStatus.Waiting;
-            OnWaiting?.Invoke();
-            _currentTimeToWait = timeToWait;
-            photonView.RPC("Activate", RpcTarget.Others);
-        }
+        if (_status != ActionStatus.Sleeping) return;
+        _status = ActionStatus.Waiting;
+        OnWaiting?.Invoke();
+        _currentTimeToWait = timeToWait;
+        photonView.RPC("Activate", RpcTarget.Others);
     }
 }

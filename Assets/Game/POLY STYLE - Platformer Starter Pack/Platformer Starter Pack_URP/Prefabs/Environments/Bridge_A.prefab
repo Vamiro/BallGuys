@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3575142616090981058}
   - component: {fileID: 5043162904318987420}
   - component: {fileID: 595583227813507720}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bridge_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9069512018116835260}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -111,8 +111,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.1807468, y: 2.5464735, z: 5.3999996}
-  m_Center: {x: -1.0892061, y: 1.2732368, z: -2.5}
+  m_Size: {x: 2.1807468, y: 2.4424996, z: 5.3999996}
+  m_Center: {x: -1.0892061, y: 1.2212498, z: -2.5}
 --- !u!65 &595583227813507720
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -132,5 +132,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.7944746, y: 0.5464735, z: 3.4000015}
-  m_Center: {x: -3.6027627, y: 2.2732368, z: -2.5}
+  m_Size: {x: 2.9044685, y: 0.447402, z: 3.4000015}
+  m_Center: {x: -3.5477657, y: 2.223701, z: -2.5}

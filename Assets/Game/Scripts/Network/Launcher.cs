@@ -1,53 +1,46 @@
-using System;
-using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
-    [Tooltip("The Ui Panel to let the user enter name, connect and play")]
-    [SerializeField]
+    [SerializeField] [Tooltip("The Ui Panel to let the user enter name, connect and play")]
     private LaunchWindow launchWindow;
 
-    [Tooltip("The UI Label to inform the user that the connection is in progress")]
-    [SerializeField]
+    [SerializeField] [Tooltip("The UI Label to inform the user that the connection is in progress")]
     private ConnectWindow connectWindow;
 
-    [SerializeField]
-    private int maxPlayers = 4;
+    [SerializeField] private int maxPlayers = 4;
+    [SerializeField] private int minPlayers = 2;
 
-    [SerializeField]
-    private int minPlayers = 2;
-
-    [SerializeField]
-    private int timeToWait = 10;
+    [SerializeField] private int timeToWait = 10;
     private float _currentTime;
     private bool _readyToStart;
-    
-    private bool _isFindingRoom;
 
     /// <summary>
-    /// This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
+    ///     This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking
+    ///     changes).
     /// </summary>
-    string _gameVersion = "1";
+    private readonly string _gameVersion = "1";
 
     /// <summary>
-    /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
-    /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
-    /// Typically this is used for the OnConnectedToMaster() callback.
+    ///     Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
+    ///     we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
+    ///     Typically this is used for the OnConnectedToMaster() callback.
     /// </summary>
-    bool _isConnecting;
+    private bool _isConnecting;
 
-    void Awake()
+    private bool _isTrainning;
+
+    private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
     }
-    
-    void Start()
+
+    private void Start()
     {
         launchWindow.OnPlay += Connect;
+        launchWindow.OnTrain += TrainConnect;
         launchWindow.Show();
         launchWindow.PlayButton.interactable = false;
     }
@@ -63,25 +56,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         if (!_readyToStart) return;
         _currentTime -= Time.deltaTime;
-        if (!(_currentTime <= 0)) return;
+        if (!(_currentTime <= 0) && PhotonNetwork.CurrentRoom.PlayerCount != maxPlayers) return;
         _readyToStart = false;
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
         PhotonNetwork.LoadLevel("MainLevel");
-    }
-
-    private void CreateRoom()
-    {
-        string roomName = "Room " + Random.Range(1000, 10000);
-        RoomOptions options = new RoomOptions
-        {
-            MaxPlayers = maxPlayers,
-            IsOpen = true,
-            IsVisible = true,
-            EmptyRoomTtl = 0,
-            PlayerTtl = 0,
-        };
-        PhotonNetwork.CreateRoom(roomName, options, null);
     }
 
     public void Connect()
@@ -89,8 +68,24 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsConnected) return;
         launchWindow.Hide();
         connectWindow.Show();
-        Debug.Log(PhotonNetwork.CountOfRooms + " rooms available");
         PhotonNetwork.JoinRandomRoom();
+    }
+
+    private void TrainConnect()
+    {
+        if (!PhotonNetwork.IsConnected) return;
+        launchWindow.Hide();
+        connectWindow.Show();
+
+        var roomName = "TrainRoom" + PhotonNetwork.CountOfRooms;
+        var roomOptions = new RoomOptions
+        {
+            MaxPlayers = 1,
+            IsOpen = false,
+            IsVisible = false
+        };
+        PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
+        _isTrainning = true;
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -111,27 +106,51 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Player entered room");
-        if (PhotonNetwork.CurrentRoom.PlayerCount < minPlayers || !PhotonNetwork.IsMasterClient) return;
+        if (!PhotonNetwork.IsMasterClient) return;
+        if (PhotonNetwork.CurrentRoom.PlayerCount < minPlayers && !_isTrainning) return;
         _currentTime = timeToWait;
         _readyToStart = true;
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("No room available, creating one...");
-        CreateRoom();
+        CreateAndJoinRoom();
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        CreateAndJoinRoom();
+    }
+
+    private void CreateAndJoinRoom()
+    {
+        var roomName = "Room" + PhotonNetwork.CountOfRooms;
+
+        var roomOptions = new RoomOptions
+        {
+            MaxPlayers = (byte)maxPlayers,
+            IsOpen = true,
+            IsVisible = true
+        };
+
+        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
     public override void OnConnectedToMaster()
     {
         _isConnecting = false;
         launchWindow.PlayButton.interactable = true;
+        launchWindow.TrainButton.interactable = true;
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         connectWindow.Hide();
         launchWindow.Show();
-        Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
+
+        launchWindow.PlayButton.interactable = false;
+        launchWindow.TrainButton.interactable = false;
+        Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}",
+            cause);
     }
 }

@@ -8,9 +8,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : SingletonPunCallbacks<GameManager>
 {
     [Tooltip("The prefab to use for representing the player")]
-    public GameObject playerPrefab;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private FinishWindow finishWindow;
+
+    private int _place = 1;
     
-    [SerializeField] private WinWindow winWindow;
     private void Start()
     {
 #if UNITY_5_4_OR_NEWER
@@ -35,19 +37,19 @@ public class GameManager : SingletonPunCallbacks<GameManager>
                 Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
             }
         }
-        
-        winWindow.OnExit += LeaveRoom;
     }
 
-    public void Win()
+    public void Finish()
     {
-        photonView.RPC(nameof(ShowWinWindow), RpcTarget.All, PhotonNetwork.NickName);
+        photonView.RPC(nameof(ShowFinishWindow), RpcTarget.All, PhotonNetwork.NickName);
     }
     
     [PunRPC]
-    private void ShowWinWindow(string winner)
+    private void ShowFinishWindow(string player)
     {
-        winWindow.Show(winner);
+        if (_place == 1) finishWindow.Show("Winner is " + player);
+        else finishWindow.Show(player + " finished at " + _place + " place");
+        _place++;
     }
 
     public override void OnLeftRoom()
@@ -62,6 +64,8 @@ public class GameManager : SingletonPunCallbacks<GameManager>
 
     public void LeaveRoom()
     {
+        if(PhotonNetwork.NetworkClientState == ClientState.Leaving) return;
+        
         if (PlayerController.LocalPlayerInstance)
         {
             PhotonNetwork.Destroy(PlayerController.LocalPlayerInstance);
