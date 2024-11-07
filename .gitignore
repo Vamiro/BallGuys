@@ -83,3 +83,4 @@ crashlytics-build.properties
 /[Aa]ssets/Plugins/tvOS
 /[Aa]ssets/CrashlyticsInit.cs
 /[Aa]ssets/GeneratedLocalRepo
+/[Aa]ssets/google-services.json
