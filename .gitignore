@@ -73,3 +73,13 @@ crashlytics-build.properties
 
 # Rider
 .idea/
+
+# Firebase Analytics
+/[Aa]ssets/Editor Default Resources
+/[Aa]ssets/ExternalDependencyManager
+/[Aa]ssets/Firebase
+/[Aa]ssets/Plugins/Android
+/[Aa]ssets/Plugins/iOS
+/[Aa]ssets/Plugins/tvOS
+/[Aa]ssets/CrashlyticsInit.cs
+/[Aa]ssets/GeneratedLocalRepo
