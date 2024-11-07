@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (Input.GetMouseButton(1))
         {
-            cameraWorkComponent.RotateAround(Input.GetAxis("Mouse X"));
+            cameraWorkComponent.RotateAround(Input.GetAxis("Mouse X") * SettingsData.Instance.sensitivity);
         }
     }
 

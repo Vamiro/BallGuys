@@ -41,6 +41,11 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         launchWindow.OnPlay += Connect;
         launchWindow.OnTrain += TrainConnect;
+        /*connectWindow.OnCancel += () =>
+        {
+            connectWindow.Hide();
+            launchWindow.Show();
+        };*/
         launchWindow.Show();
         launchWindow.PlayButton.interactable = false;
     }

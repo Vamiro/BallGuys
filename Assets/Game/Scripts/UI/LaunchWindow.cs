@@ -1,9 +1,12 @@
+using System;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WebSocketSharp;
+using Random = UnityEngine.Random;
 
 public class LaunchWindow : BaseWindow
 {
@@ -11,20 +14,62 @@ public class LaunchWindow : BaseWindow
     
     [SerializeField] private Button playButton;
     [SerializeField] private Button trainButton;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private TMP_InputField playerNameInputField;
+    [SerializeField] private SettingsWindow settingsWindow;
     
     public Button PlayButton => playButton;
     public UnityAction OnPlay;
+    
     public Button TrainButton => trainButton;
     public UnityAction OnTrain;
 
     private void Awake()
     {
-        playButton.onClick.AddListener(() => OnPlay?.Invoke());
-        trainButton.onClick.AddListener(() => OnTrain?.Invoke());
-        exitButton.onClick.AddListener(Application.Quit);
+        playButton.onClick.AddListener(PlayButtonClicked);
+        trainButton.onClick.AddListener(TrainButtonClicked);
+        exitButton.onClick.AddListener(ExitButtonClicked);
+        settingsButton.onClick.AddListener(SettingsButtonClicked);
         playerNameInputField.onDeselect.AddListener(OnPlayerNameFieldDeselected);
+    }
+
+    private void SettingsButtonClicked()
+    {
+        HandleButtonClick(() =>
+        {
+            Hide();
+            settingsWindow.Show(SettingsData.Instance);
+        });
+    }
+
+    private void PlayButtonClicked()
+    {
+        HandleButtonClick(OnPlay);
+    }
+
+    private void TrainButtonClicked()
+    {
+        HandleButtonClick(OnTrain);
+    }
+
+    private void ExitButtonClicked()
+    {
+        HandleButtonClick(Application.Quit);
+    }
+
+    private void HandleButtonClick(UnityAction action)
+    {
+        SoundManager.Instance.PlaySound("ButtonClick");
+        try
+        {
+            action?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private void Start()
@@ -32,7 +77,7 @@ public class LaunchWindow : BaseWindow
         InitializeNameField();
     }
 
-    protected override void OnShow(params object[] args)
+    protected override void OnShow()
     {
         
     }
@@ -61,6 +106,7 @@ public class LaunchWindow : BaseWindow
         playerNameInputField.text = nickName;
         PhotonNetwork.NickName = nickName;
     }
+    
 
     protected override void OnHide()
     {
@@ -69,9 +115,9 @@ public class LaunchWindow : BaseWindow
     
     private void OnDestroy()
     {
-        playButton.onClick.RemoveListener(() => OnPlay?.Invoke());
-        trainButton.onClick.RemoveListener(() => OnTrain?.Invoke());
-        exitButton.onClick.RemoveListener(Application.Quit);
+        playButton.onClick.RemoveListener(PlayButtonClicked);
+        trainButton.onClick.RemoveListener(TrainButtonClicked);
+        exitButton.onClick.RemoveListener(ExitButtonClicked);
         playerNameInputField.onDeselect.RemoveListener(OnPlayerNameFieldDeselected);
     }
 }

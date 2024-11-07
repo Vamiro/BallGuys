@@ -7,19 +7,30 @@ using UnityEngine.UI;
 
 namespace Game.Scripts.UI
 {
-    public class FinishWindow : BaseWindow
+    public class FinishWindow : BaseWindow<string>
     {
         [SerializeField] private TMP_Text finishText;
         [SerializeField] private Button closeButton;
 
         private void Start()
         {
-            closeButton.onClick.AddListener(Hide);
+            closeButton.onClick.AddListener(CloseButtonClicked);
+        }
+        
+        private void CloseButtonClicked()
+        {
+            SoundManager.Instance.PlaySound("ButtonClick");
+            Hide();
         }
 
-        protected override void OnShow(params object[] args)
+        protected override void SetUp(string argument)
         {
-            finishText.text = (string) args[0];
+            finishText.text = _argument;
+        }
+
+        protected override void OnShow()
+        {
+            finishText.text = _argument;
         }
 
         protected override void OnHide()
@@ -28,7 +39,7 @@ namespace Game.Scripts.UI
         
         private void OnDestroy()
         {
-            closeButton.onClick.RemoveListener(Hide);
+            closeButton.onClick.RemoveListener(CloseButtonClicked);
         }
     }
 }

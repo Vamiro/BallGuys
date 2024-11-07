@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "423247192091",
+    "project_id": "ballguys",
+    "storage_bucket": "ballguys.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423247192091:android:9eafb3270813b4c63ed8be",
+        "android_client_info": {
+          "package_name": "com.Vamirocorp.BallGuys"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiVLZeLRxwsDlWuBHzbi50c2tu3DXj9II"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

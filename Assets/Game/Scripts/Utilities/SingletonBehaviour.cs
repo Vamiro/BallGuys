@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Game.Scripts.Utilities
 {
@@ -19,6 +20,13 @@ namespace Game.Scripts.Utilities
                 }
                 return _instance;
             }
+        }
+        
+        protected virtual void Awake()
+        {
+            if (_instance == null) return;
+            Destroy(gameObject);
+            return;
         }
     }
 }

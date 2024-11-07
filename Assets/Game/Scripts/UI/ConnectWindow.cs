@@ -12,8 +12,8 @@ public class ConnectWindow : BaseWindow
             connectingText.text = "Connecting" + new string('.', (int)Time.time % 4);
         }
     }
-
-    protected override void OnShow(params object[] args)
+    
+    protected override void OnShow()
     {
     }
 
