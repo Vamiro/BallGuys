@@ -16,6 +16,7 @@ public class LaunchWindow : BaseWindow
     [SerializeField] private Button trainButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private Button crashButton;
     [SerializeField] private TMP_InputField playerNameInputField;
     [SerializeField] private SettingsWindow settingsWindow;
     
@@ -31,7 +32,16 @@ public class LaunchWindow : BaseWindow
         trainButton.onClick.AddListener(TrainButtonClicked);
         exitButton.onClick.AddListener(ExitButtonClicked);
         settingsButton.onClick.AddListener(SettingsButtonClicked);
+        crashButton.onClick.AddListener(CrashButtonClicked);
         playerNameInputField.onDeselect.AddListener(OnPlayerNameFieldDeselected);
+    }
+
+    private void CrashButtonClicked()
+    {
+        HandleButtonClick(() =>
+        {
+            CrashlyticsInit.Instance.CrashMe();
+        });
     }
 
     private void SettingsButtonClicked()
